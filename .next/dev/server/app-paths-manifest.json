@@ -1,5 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/qr-code/page": "app/qr-code/page.js",
-  "/register/page": "app/register/page.js"
-}
