@@ -15,7 +15,7 @@ const display = Fraunces({
 export const metadata: Metadata = {
   title: "Partner Convening 2026 | OAK Foundation",
   description:
-    "OAK Partner Convening 2026 — bringing partners together in Harare, Zimbabwe, from 9–11 March 2026.",
+    "OAK Partner Convening 2026 — bringing partners together at Cresta Lodge, Harare, from 9–11 November 2026.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

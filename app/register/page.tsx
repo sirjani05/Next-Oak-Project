@@ -3,8 +3,9 @@
 import { FormEvent, useState } from "react";
 import { Calendar, ChevronDown, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { defaultDestination, type UserRole } from "@/lib/session";
+import type { UserRole } from "@/lib/session";
 import { PlatformHeader } from "@/components/platform-header";
+import { registerAttendee } from "@/app/register/actions";
 
 type FormData = {
   firstName: string;
@@ -39,10 +40,12 @@ export default function RegistrationPage() {
   const router = useRouter();
   const [form, setForm] = useState(initial);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const update = (field: keyof FormData, value: string | boolean) =>
     setForm((current) => ({ ...current, [field]: value }));
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
     if (
       !form.firstName ||
       !form.lastName ||
@@ -60,37 +63,17 @@ export default function RegistrationPage() {
       setError("Please enter a valid email address.");
       return;
     }
-    const id = `OAK-2026-${crypto.randomUUID().slice(0, 4).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
-    localStorage.setItem(
-      "oak-registration",
-      JSON.stringify({
-        firstName: form.firstName,
-        lastName: form.lastName,
-        organisation: form.organisation,
-        role: form.role,
-        email: form.email,
-        id,
-        subPartner: form.subPartner,
-        phone: form.phone,
-        dietary: form.dietary,
-        accessibility: form.accessibility,
-        travel: form.travel,
-        accommodation: form.accommodation,
-      }),
-    );
-    localStorage.setItem(
-      "oak-registration-private",
-      JSON.stringify({
-        phone: form.phone,
-        subPartner: form.subPartner,
-        dietary: form.dietary,
-        accessibility: form.accessibility,
-        travel: form.travel,
-        accommodation: form.accommodation,
-      }),
-    );
-    const destination = defaultDestination(form.role as UserRole);
-    router.push(form.role === "Partner" ? `${destination}/${id}` : destination);
+    setIsSubmitting(true);
+    const result = await registerAttendee({
+      ...form,
+      role: form.role as UserRole,
+    });
+    setIsSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    router.push(result.destination);
   };
   return (
     <div className="mobile-product-page">
@@ -98,7 +81,7 @@ export default function RegistrationPage() {
       <div className="mobile-product-stack">
         <section className="mobile-banner">
           <h1>Partner Convening 2026</h1>
-          <p>Cresta Lodge, Harare · 9–11 March 2026</p>
+          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
         </section>
         <div className="mobile-stats">
           <Stat icon={<User />} value="110+" label="Attendees" />
@@ -223,7 +206,7 @@ export default function RegistrationPage() {
               </p>
             )}
             <button className="mobile-primary-button" type="submit">
-              Register
+              {isSubmitting ? "Registering..." : "Register"}
             </button>
           </form>
         </section>

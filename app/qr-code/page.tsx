@@ -63,7 +63,7 @@ export default function QrCodePage() {
             <strong>{id}</strong>
           </div>
           <p>
-            <MapPin /> Cresta Lodge, Harare · 9–11 March 2026
+            <MapPin /> Cresta Lodge, Harare · 9–11 November 2026
           </p>
         </section>
         <button className="mobile-primary-button" onClick={downloadQrCode}>

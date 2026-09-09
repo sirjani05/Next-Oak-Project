@@ -876,6 +876,51 @@ h2 {
   height: 15px;
   width: 15px;
 }
+.partner-card a {
+  background: #f0f3f8;
+  border-radius: 10px;
+  color: #64748b;
+  display: flex;
+  padding: 8px;
+}
+.partner-card a svg {
+  height: 15px;
+  width: 15px;
+}
+.attendance-filter {
+  background: #fff;
+  border: 1px solid #e8edf2;
+  border-radius: 12px;
+  color: #1e293b;
+  font-size: 0.72rem;
+  margin-top: 10px;
+  padding: 11px 13px;
+  width: 100%;
+}
+.attendance-table {
+  background: #fff;
+  border: 1px solid #e8edf2;
+  border-radius: 16px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+.attendance-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
+  padding: 13px 15px;
+}
+.attendance-row + .attendance-row {
+  border-top: 1px solid #eef2f6;
+}
+.attendance-row span,
+.attendance-row strong {
+  color: #64748b;
+  font-size: 0.65rem;
+}
+.attendance-row strong {
+  color: #0f172a;
+}
 .program-days {
   background: #fff;
   border: 1px solid #e8edf2;
@@ -1291,6 +1336,14 @@ h2 {
   justify-content: space-between;
   overflow: hidden;
   padding: 24px;
+}
+.scanner-video {
+  border-radius: 12px;
+  height: 120px;
+  object-fit: cover;
+  opacity: 0.85;
+  position: absolute;
+  width: 160px;
 }
 .scanner-reticle {
   height: 160px;

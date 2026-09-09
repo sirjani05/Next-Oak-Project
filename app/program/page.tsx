@@ -1,16 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FileText, MapPin, Plus } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
-import { programme } from "@/data/programme";
 import { PlatformHeader } from "@/components/platform-header";
+import { getProgrammeSessions } from "@/app/platform-actions";
 
+type ProgrammeSession = {
+  id: string;
+  title: string;
+  speaker: string | null;
+  start_time: string;
+  location: string;
+  category: "Plenary" | "Breakout" | "Workshop" | "Social";
+  day_number: number;
+};
+
+const days = ["Day 1", "Day 2", "Day 3"];
 export default function ProgramPage() {
   const [day, setDay] = useState(0);
+  const [sessions, setSessions] = useState<ProgrammeSession[]>([]);
+  const [loadError, setLoadError] = useState("");
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<string | null>(null);
-  const sessions = programme[day].sessions;
+  useEffect(() => {
+    void getProgrammeSessions().then((result) => {
+      if (result.ok) setSessions(result.data as ProgrammeSession[]);
+      else setLoadError(result.error);
+    });
+  }, []);
+  const daySessions = sessions.filter(
+    (session) => session.day_number === day + 1,
+  );
   return (
     <div className="mobile-product-page">
       <PlatformHeader />
@@ -18,26 +39,31 @@ export default function ProgramPage() {
         <div className="platform-mobile-heading">
           <p>OAK Partner Convening 2026</p>
           <h1>Programme</h1>
-          <span>Schedule · 9–11 March 2026</span>
+          <span>Schedule · 9–11 November 2026</span>
         </div>
         <div className="program-days">
-          {programme.map((item, index) => (
+          {days.map((item, index) => (
             <button
               className={day === index ? "active" : ""}
               onClick={() => setDay(index)}
-              key={item.day}
+              key={item}
             >
-              <span>{item.day.replace("Day ", "DAY ")}</span>
-              <strong>{item.date}</strong>
+              <span>{item.replace("Day ", "DAY ")}</span>
+              <strong>{9 + index} Nov</strong>
             </button>
           ))}
         </div>
         <div className="program-session-list">
-          {sessions.map((session) => (
-            <article className="program-session" key={session.title}>
-              <time>{session.time}</time>
+          {daySessions.map((session) => (
+            <article className="program-session" key={session.id}>
+              <time>
+                {new Date(session.start_time).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </time>
               <div>
-                <span className="session-badge">{session.type}</span>
+                <span className="session-badge">{session.category}</span>
                 <h2>{session.title}</h2>
                 <span className="session-place">
                   <MapPin />
@@ -46,13 +72,23 @@ export default function ProgramPage() {
               </div>
               <button
                 aria-label={`Add note to ${session.title}`}
-                onClick={() => setSelected(session.title)}
+                onClick={() => setSelected(session.id)}
               >
                 <Plus />
               </button>
             </article>
           ))}
         </div>
+        {loadError && (
+          <p className="mobile-error" role="alert">
+            {loadError}
+          </p>
+        )}
+        {!loadError && sessions.length === 0 && (
+          <p className="mobile-footnote">
+            No programme sessions have been published yet.
+          </p>
+        )}
         <section className="takeaways-card">
           <FileText />
           <div>
@@ -65,7 +101,7 @@ export default function ProgramPage() {
         </section>
         {selected && (
           <div className="notes-panel">
-            <label htmlFor="session-note">Note for {selected}</label>
+            <label htmlFor="session-note">Session note</label>
             <textarea
               id="session-note"
               rows={4}

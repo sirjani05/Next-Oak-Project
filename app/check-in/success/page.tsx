@@ -17,7 +17,7 @@ export default function CheckInSuccessPage() {
             <h1>Checked In Successfully</h1>
             <p>
               <Clock />
-              09:34 · 9 March 2026
+              09:34 · 9 November 2026
             </p>
           </div>
         </section>

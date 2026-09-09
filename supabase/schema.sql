@@ -5,7 +5,7 @@ create extension if not exists pgcrypto;
 
 create table if not exists public.attendees (
   id uuid primary key default gen_random_uuid(),
-  qr_code text not null unique,
+  qr_code text unique,
   first_name text not null check (length(trim(first_name)) between 1 and 100),
   last_name text not null check (length(trim(last_name)) between 1 and 100),
   email text not null unique check (length(trim(email)) <= 320),
@@ -19,6 +19,8 @@ create table if not exists public.attendees (
   consent_agreed boolean not null default false check (consent_agreed = true),
   created_at timestamptz not null default now()
 );
+
+alter table public.attendees alter column qr_code drop not null;
 
 comment on column public.attendees.dietary_requirements is 'Sensitive: admin access only.';
 comment on column public.attendees.accessibility_requirements is 'Sensitive: admin access only.';

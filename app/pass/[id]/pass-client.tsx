@@ -8,11 +8,10 @@ import { MobileNav } from "@/components/mobile-nav";
 import { PlatformHeader } from "@/components/platform-header";
 import { readRegistration, type Registration } from "@/lib/session";
 
-export default function PassPage({ params }: { params: { id: string } }) {
+export default function PassClient({ id }: { id: string }) {
   const [registration] = useState<Registration | null>(() =>
     readRegistration(),
   );
-  const id = params.id || registration?.id || "OAK-2026-7842-XKPH";
   const downloadQrCode = () => {
     const svg = document.querySelector<SVGSVGElement>(".entry-pass-card svg");
     if (!svg) return;

@@ -11,7 +11,7 @@ export type Session = {
 export const programme = [
   {
     day: "Day 01",
-    date: "9 March",
+    date: "9 November",
     sessions: [
       {
         time: "09:00 – 10:30",
@@ -41,7 +41,7 @@ export const programme = [
   },
   {
     day: "Day 02",
-    date: "10 March",
+    date: "10 November",
     sessions: [
       {
         time: "09:00 – 10:30",
@@ -65,7 +65,7 @@ export const programme = [
   },
   {
     day: "Day 03",
-    date: "11 March",
+    date: "11 November",
     sessions: [
       {
         time: "09:30 – 11:00",

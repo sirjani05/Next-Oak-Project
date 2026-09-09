@@ -1,28 +1,42 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Mail, Search } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 import { PlatformHeader } from "@/components/platform-header";
+import { getPartners } from "@/app/platform-actions";
 
-const partners = [
-  {
-    name: "Open Society Foundations",
-    category: "Rights & Governance",
-    initials: "OS",
-  },
-  { name: "MENA Rights Group", category: "Human Rights", initials: "MR" },
-  {
-    name: "Africa Climate Alliance",
-    category: "Climate Justice",
-    initials: "AC",
-  },
-  {
-    name: "Digital Frontiers Institute",
-    category: "Digital Rights",
-    initials: "DF",
-  },
-];
+type Partner = {
+  id: string;
+  name: string;
+  region: string;
+  org_type: string;
+  focus_areas: string[];
+  contact_email: string | null;
+};
+
 export default function PartnersPage() {
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [query, setQuery] = useState("");
+  const [region, setRegion] = useState("All Regions");
+  const [error, setError] = useState("");
+  useEffect(() => {
+    void getPartners().then((result) => {
+      if (result.ok) setPartners(result.data as Partner[]);
+      else setError(result.error);
+    });
+  }, []);
+  const filtered = useMemo(
+    () =>
+      partners.filter(
+        (partner) =>
+          (region === "All Regions" || partner.region === region) &&
+          `${partner.name} ${partner.org_type} ${partner.focus_areas.join(" ")}`
+            .toLowerCase()
+            .includes(query.toLowerCase()),
+      ),
+    [partners, query, region],
+  );
   return (
     <div className="mobile-product-page">
       <PlatformHeader />
@@ -34,19 +48,56 @@ export default function PartnersPage() {
         </div>
         <div className="partner-search">
           <Search />
-          <input placeholder="Search partners" />
+          <input
+            placeholder="Search partners"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
         </div>
+        <div className="filter-row" role="group" aria-label="Partner regions">
+          {[
+            "All Regions",
+            "Global",
+            "Sub-Saharan Africa",
+            "Northern Europe",
+            "Middle East & North Africa",
+          ].map((item) => (
+            <button
+              className={region === item ? "active" : ""}
+              key={item}
+              onClick={() => setRegion(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        {error && (
+          <p className="mobile-error" role="alert">
+            {error}
+          </p>
+        )}
         <div className="partner-grid">
-          {partners.map((partner) => (
-            <article className="partner-card" key={partner.name}>
-              <span className="partner-logo">{partner.initials}</span>
+          {filtered.map((partner) => (
+            <article className="partner-card" key={partner.id}>
+              <span className="partner-logo">
+                {partner.name.slice(0, 2).toUpperCase()}
+              </span>
               <div>
                 <h2>{partner.name}</h2>
-                <p>{partner.category}</p>
+                <p>
+                  {partner.org_type} · {partner.region}
+                </p>
               </div>
-              <button aria-label={`Contact ${partner.name}`}>
+              <a
+                href={
+                  partner.contact_email
+                    ? `mailto:${partner.contact_email}`
+                    : undefined
+                }
+                aria-label={`Contact ${partner.name}`}
+              >
                 <Mail />
-              </button>
+              </a>
             </article>
           ))}
         </div>
