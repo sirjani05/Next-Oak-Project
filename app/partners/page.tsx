@@ -2,6 +2,7 @@
 
 import { Mail, Search } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
+import { PlatformHeader } from "@/components/platform-header";
 
 const partners = [
   {
@@ -24,6 +25,7 @@ const partners = [
 export default function PartnersPage() {
   return (
     <div className="mobile-product-page">
+      <PlatformHeader />
       <div className="mobile-product-stack">
         <div className="platform-mobile-heading">
           <p>Partner Convening 2026</p>

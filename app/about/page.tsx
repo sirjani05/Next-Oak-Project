@@ -13,7 +13,7 @@ export default function AboutPage() {
           <em>what comes next.</em>
         </h1>
         <p>
-          The Partner Convening brings partners together in Geneva for three
+          The Partner Convening brings partners together in Harare for three
           days of dialogue, learning, collaboration and shared action.
         </p>
       </div>

@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { Calendar, ChevronDown, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { defaultDestination, type UserRole } from "@/lib/session";
+import { PlatformHeader } from "@/components/platform-header";
 
 type FormData = {
   firstName: string;
@@ -16,6 +17,7 @@ type FormData = {
   dietary: string;
   accessibility: string;
   travel: string;
+  accommodation: string;
   agreeToTerms: boolean;
 };
 const initial: FormData = {
@@ -29,6 +31,7 @@ const initial: FormData = {
   dietary: "",
   accessibility: "",
   travel: "",
+  accommodation: "",
   agreeToTerms: false,
 };
 
@@ -67,6 +70,12 @@ export default function RegistrationPage() {
         role: form.role,
         email: form.email,
         id,
+        subPartner: form.subPartner,
+        phone: form.phone,
+        dietary: form.dietary,
+        accessibility: form.accessibility,
+        travel: form.travel,
+        accommodation: form.accommodation,
       }),
     );
     localStorage.setItem(
@@ -77,16 +86,19 @@ export default function RegistrationPage() {
         dietary: form.dietary,
         accessibility: form.accessibility,
         travel: form.travel,
+        accommodation: form.accommodation,
       }),
     );
-    router.push(defaultDestination(form.role as UserRole));
+    const destination = defaultDestination(form.role as UserRole);
+    router.push(form.role === "Partner" ? `${destination}/${id}` : destination);
   };
   return (
     <div className="mobile-product-page">
+      <PlatformHeader />
       <div className="mobile-product-stack">
         <section className="mobile-banner">
           <h1>Partner Convening 2026</h1>
-          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
+          <p>Cresta Lodge, Harare · 9–11 March 2026</p>
         </section>
         <div className="mobile-stats">
           <Stat icon={<User />} value="110+" label="Attendees" />
@@ -183,6 +195,13 @@ export default function RegistrationPage() {
                 placeholder="e.g. Flight from London, hotel needed"
                 compact
               />
+              <Field
+                label="ACCOMMODATION REQUIREMENTS"
+                value={form.accommodation}
+                onChange={(value) => update("accommodation", value)}
+                placeholder="e.g. Single room, shared room"
+                compact
+              />
             </div>
             <label className="mobile-consent">
               <input
@@ -204,7 +223,7 @@ export default function RegistrationPage() {
               </p>
             )}
             <button className="mobile-primary-button" type="submit">
-              Register &amp; Generate QR Code
+              Register
             </button>
           </form>
         </section>

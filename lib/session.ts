@@ -9,17 +9,23 @@ export type Registration = {
   firstName: string;
   lastName: string;
   organisation: string;
+  subPartner?: string;
   role: UserRole;
   email: string;
+  phone?: string;
+  dietary?: string;
+  accessibility?: string;
+  travel?: string;
+  accommodation?: string;
   id: string;
 };
 
 export const sessionKey = "oak-registration";
 
 export function defaultDestination(role: UserRole) {
-  if (role === "Partner") return "/qr-code";
-  if (role === "Coordination Team") return "/check-in";
-  return "/program";
+  if (role === "Partner") return "/pass";
+  if (role === "Coordination Team") return "/admin/check-in";
+  return "/programme";
 }
 
 export function readRegistration(): Registration | null {

@@ -22,13 +22,13 @@ type NavItem = {
 const items: NavItem[] = [
   { href: "/register", label: "Register", icon: UserPlus },
   {
-    href: "/check-in",
+    href: "/admin/check-in",
     label: "Check In",
     icon: ScanLine,
     roles: ["Coordination Team"],
   },
   {
-    href: "/program",
+    href: "/programme",
     label: "Programme",
     icon: CalendarDays,
     roles: ["OAK Staff", "Presenter", "Observer", "Coordination Team"],
@@ -40,12 +40,12 @@ const items: NavItem[] = [
     roles: ["OAK Staff", "Presenter", "Observer", "Coordination Team"],
   },
   {
-    href: "/attendance",
+    href: "/admin/attendance",
     label: "Attendance",
     icon: Users,
     roles: ["Coordination Team"],
   },
-  { href: "/qr-code", label: "QR Pass", icon: QrCode, roles: ["Partner"] },
+  { href: "/pass", label: "QR Pass", icon: QrCode, roles: ["Partner"] },
 ];
 
 export function MobileNav() {
@@ -62,8 +62,16 @@ export function MobileNav() {
         const Icon = item.icon;
         return (
           <Link
-            className={pathname === item.href ? "active" : ""}
-            href={item.href}
+            className={
+              pathname === item.href || pathname.startsWith(`${item.href}/`)
+                ? "active"
+                : ""
+            }
+            href={
+              item.href === "/pass"
+                ? `/pass/${readRegistration()?.id ?? ""}`
+                : item.href
+            }
             key={item.href}
           >
             <Icon />

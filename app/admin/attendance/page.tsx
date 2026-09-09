@@ -1,4 +1,1 @@
-import { redirect } from "next/navigation";
-export default function AdminAttendancePage() {
-  redirect("/attendance");
-}
+export { default } from "@/app/attendance/page";

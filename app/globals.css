@@ -599,6 +599,60 @@ h2 {
 .mobile-product-page:has(.mobile-bottom-nav) {
   padding-bottom: 88px;
 }
+.platform-header {
+  align-items: center;
+  background: #1e2b4d;
+  border-radius: 16px;
+  color: #fff;
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+  margin: 0 auto 24px;
+  max-width: 1180px;
+  padding: 18px 24px;
+  width: 100%;
+}
+.platform-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 245px;
+}
+.platform-brand strong {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+.platform-brand span {
+  color: #bfdbfe;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+}
+.platform-brand small {
+  color: #cbd5e1;
+  font-size: 0.62rem;
+  margin-top: 3px;
+}
+.platform-nav {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.platform-nav a {
+  align-items: center;
+  border-radius: 10px;
+  color: #cbd5e1;
+  display: inline-flex;
+  font-size: 0.7rem;
+  gap: 6px;
+  padding: 9px 11px;
+}
+.platform-nav a:hover,
+.platform-nav a.active {
+  background: #33456f;
+  color: #fff;
+}
 .platform-mobile-heading {
   padding: 4px 2px 7px;
 }
@@ -965,6 +1019,30 @@ h2 {
   font-family: var(--font-sans), sans-serif;
   min-height: 100vh;
   padding: 32px 16px;
+}
+@media (min-width: 801px) {
+  .mobile-product-page {
+    padding: 36px 5vw 48px;
+  }
+  .mobile-product-stack {
+    max-width: 1180px;
+  }
+}
+@media (max-width: 800px) {
+  .platform-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+  .platform-nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .platform-nav a {
+    padding: 7px 8px;
+  }
 }
 .mobile-product-stack {
   margin: 0 auto;

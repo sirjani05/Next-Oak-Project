@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { ArrowRight, ScanLine, Users } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
+import { PlatformHeader } from "@/components/platform-header";
 
 export default function AttendancePage() {
   return (
     <div className="mobile-product-page">
+      <PlatformHeader />
       <div className="mobile-product-stack">
         <div className="platform-mobile-heading">
           <p>Partner Convening 2026</p>
           <h1>Attendance</h1>
-          <span>Check-in tracking · 9–11 November 2026</span>
+          <span>Check-in tracking · 9–11 March 2026</span>
         </div>
         <div className="attendance-stats">
           <Stat label="Expected" value="110" />
@@ -27,7 +29,7 @@ export default function AttendancePage() {
             Attendees will appear here once they have been scanned in at the
             event entrance.
           </p>
-          <Link className="mobile-primary-button" href="/check-in">
+          <Link className="mobile-primary-button" href="/admin/check-in">
             <ScanLine />
             Go to Check-In Scanner <ArrowRight />
           </Link>

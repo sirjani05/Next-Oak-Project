@@ -74,7 +74,7 @@ export default function SuccessPage() {
             </strong>
             <span>{registration.organisation}</span>
           </div>
-          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
+          <p>Cresta Lodge, Harare · 9–11 March 2026</p>
           <QRCodeSVG
             value={registration.id}
             size={150}

@@ -11,6 +11,27 @@ export default function QrCodePage() {
     readRegistration(),
   );
   const id = registration?.id ?? "OAK-2026-7842-XKPH";
+  const downloadQrCode = () => {
+    const svg = document.querySelector<SVGSVGElement>(".qr-pass-card svg");
+    if (!svg) return;
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 570;
+      canvas.height = 570;
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      context.fillStyle = "#ffffff";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const link = document.createElement("a");
+      link.download = `${id}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    };
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgData)}`;
+  };
   return (
     <div className="mobile-product-page">
       <div className="mobile-product-stack qr-stack">
@@ -42,10 +63,10 @@ export default function QrCodePage() {
             <strong>{id}</strong>
           </div>
           <p>
-            <MapPin /> Cresta Lodge, Harare · 9–11 November 2026
+            <MapPin /> Cresta Lodge, Harare · 9–11 March 2026
           </p>
         </section>
-        <button className="mobile-primary-button">
+        <button className="mobile-primary-button" onClick={downloadQrCode}>
           <Download />
           Download QR Code
         </button>

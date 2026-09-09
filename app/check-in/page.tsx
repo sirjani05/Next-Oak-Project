@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Scan } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MobileNav } from "@/components/mobile-nav";
+import { PlatformHeader } from "@/components/platform-header";
 
 const attendees = [
   {
@@ -45,6 +46,7 @@ export default function CheckInScannerPage() {
     );
   return (
     <div className="mobile-product-page">
+      <PlatformHeader />
       <div className="mobile-product-stack checkin-stack">
         <div className="checkin-heading">
           <h1>Event Check-In</h1>

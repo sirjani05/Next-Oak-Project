@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FileText, MapPin, Plus } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 import { programme } from "@/data/programme";
+import { PlatformHeader } from "@/components/platform-header";
 
 export default function ProgramPage() {
   const [day, setDay] = useState(0);
@@ -12,11 +13,12 @@ export default function ProgramPage() {
   const sessions = programme[day].sessions;
   return (
     <div className="mobile-product-page">
+      <PlatformHeader />
       <div className="mobile-product-stack program-stack">
         <div className="platform-mobile-heading">
           <p>OAK Partner Convening 2026</p>
           <h1>Programme</h1>
-          <span>Schedule · 9–11 November 2026</span>
+          <span>Schedule · 9–11 March 2026</span>
         </div>
         <div className="program-days">
           {programme.map((item, index) => (
