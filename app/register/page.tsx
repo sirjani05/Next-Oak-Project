@@ -19,8 +19,8 @@ type FormData = {
   agreeToTerms: boolean;
 };
 const initial: FormData = {
-  firstName: "Maria",
-  lastName: "Schmidt",
+  firstName: "",
+  lastName: "",
   organisation: "",
   subPartner: "",
   role: "",
@@ -102,12 +102,14 @@ export default function RegistrationPage() {
                 value={form.firstName}
                 onChange={(value) => update("firstName", value)}
                 required
+                placeholder="Maria"
               />
               <Field
                 label="LAST NAME"
                 value={form.lastName}
                 onChange={(value) => update("lastName", value)}
                 required
+                placeholder="Schmidt"
               />
             </div>
             <Field
