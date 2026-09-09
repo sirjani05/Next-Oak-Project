@@ -1,273 +1,265 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowUpRight, Check } from "lucide-react";
-import { Header, Footer } from "@/components/layout";
+import { Calendar, ChevronDown, User, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { defaultDestination, type UserRole } from "@/lib/session";
 
 type FormData = {
   firstName: string;
   lastName: string;
   organisation: string;
-  role: string;
+  subPartner: string;
+  role: UserRole | "";
   email: string;
   phone: string;
   dietary: string;
   accessibility: string;
   travel: string;
-  consent: boolean;
+  agreeToTerms: boolean;
 };
 const initial: FormData = {
-  firstName: "",
-  lastName: "",
+  firstName: "Maria",
+  lastName: "Schmidt",
   organisation: "",
+  subPartner: "",
   role: "",
   email: "",
   phone: "",
   dietary: "",
   accessibility: "",
   travel: "",
-  consent: false,
+  agreeToTerms: false,
 };
 
-export default function RegisterPage() {
+export default function RegistrationPage() {
+  const router = useRouter();
   const [form, setForm] = useState(initial);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {},
-  );
-  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
   const update = (field: keyof FormData, value: string | boolean) =>
     setForm((current) => ({ ...current, [field]: value }));
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const next: typeof errors = {};
-    for (const field of [
-      "firstName",
-      "lastName",
-      "organisation",
-      "role",
-      "email",
-    ] as const)
-      if (!form[field].trim()) next[field] = "This field is required.";
-    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email))
-      next.email = "Please enter a valid email address.";
-    if (!form.consent) next.consent = "Please agree before continuing.";
-    setErrors(next);
-    if (!Object.keys(next).length) {
-      const id = `OAK-PC26-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
-      localStorage.setItem("oak-registration", JSON.stringify({ ...form, id }));
-      setSubmitted(true);
+    if (
+      !form.firstName ||
+      !form.lastName ||
+      !form.organisation ||
+      !form.role ||
+      !form.email ||
+      !form.agreeToTerms
+    ) {
+      setError(
+        "Please complete the required fields and agree to the privacy policy.",
+      );
+      return;
     }
-  };
-  if (submitted)
-    return (
-      <main>
-        <Header />
-        <section className="form-success">
-          <div className="success-icon">
-            <Check />
-          </div>
-          <p className="eyebrow">Registration received</p>
-          <h1>
-            You’re
-            <br />
-            <em>registered.</em>
-          </h1>
-          <p>
-            Your details have been saved for the Partner Convening 2026. Your
-            registration confirmation is ready to view.
-          </p>
-          <a className="button button-dark" href="/register/success">
-            View confirmation <ArrowUpRight size={17} />
-          </a>
-        </section>
-        <Footer />
-      </main>
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    const id = `OAK-2026-${crypto.randomUUID().slice(0, 4).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
+    localStorage.setItem(
+      "oak-registration",
+      JSON.stringify({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        organisation: form.organisation,
+        role: form.role,
+        email: form.email,
+        id,
+      }),
     );
+    localStorage.setItem(
+      "oak-registration-private",
+      JSON.stringify({
+        phone: form.phone,
+        subPartner: form.subPartner,
+        dietary: form.dietary,
+        accessibility: form.accessibility,
+        travel: form.travel,
+      }),
+    );
+    router.push(defaultDestination(form.role as UserRole));
+  };
   return (
-    <main>
-      <Header />
-      <div className="page-intro register-intro">
-        <p className="eyebrow">Registration</p>
-        <h1>
-          Make your
-          <br />
-          <em>place here.</em>
-        </h1>
-        <p>
-          Tell us how to make the convening work well for you. Required fields
-          are marked with an asterisk.
-        </p>
-      </div>
-      <form className="registration-form" onSubmit={submit} noValidate>
-        <FormSection number="01" title="Your details">
-          <div className="form-grid">
+    <div className="mobile-product-page">
+      <div className="mobile-product-stack">
+        <section className="mobile-banner">
+          <h1>Partner Convening 2026</h1>
+          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
+        </section>
+        <div className="mobile-stats">
+          <Stat icon={<User />} value="110+" label="Attendees" />
+          <Stat icon={<Calendar />} value="24" label="Sessions" />
+          <Stat icon={<Users />} value="38" label="Partners" />
+        </div>
+        <section className="mobile-card">
+          <h2>Registration Form</h2>
+          <form onSubmit={submit} className="mobile-form">
+            <div className="mobile-two-col">
+              <Field
+                label="FIRST NAME"
+                value={form.firstName}
+                onChange={(value) => update("firstName", value)}
+                required
+              />
+              <Field
+                label="LAST NAME"
+                value={form.lastName}
+                onChange={(value) => update("lastName", value)}
+                required
+              />
+            </div>
             <Field
-              label="First name"
-              name="firstName"
-              value={form.firstName}
-              error={errors.firstName}
-              update={update}
+              label="ORGANISATION"
+              value={form.organisation}
+              onChange={(value) => update("organisation", value)}
+              placeholder="Your organisation name"
               required
             />
             <Field
-              label="Last name"
-              name="lastName"
-              value={form.lastName}
-              error={errors.lastName}
-              update={update}
-              required
+              label="SUB-PARTNER / PROGRAMME AREA"
+              value={form.subPartner}
+              onChange={(value) => update("subPartner", value)}
+              placeholder="Optional"
             />
+            <label className="mobile-field">
+              ROLE / CAPACITY <span>*</span>
+              <div className="mobile-select-wrap">
+                <select
+                  value={form.role}
+                  onChange={(event) => update("role", event.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select your role
+                  </option>
+                  <option>Partner</option>
+                  <option>OAK Staff</option>
+                  <option>Coordination Team</option>
+                  <option>Presenter</option>
+                  <option>Observer</option>
+                </select>
+                <ChevronDown />
+              </div>
+            </label>
             <Field
-              label="Email address"
-              name="email"
+              label="EMAIL ADDRESS"
               type="email"
               value={form.email}
-              error={errors.email}
-              update={update}
+              onChange={(value) => update("email", value)}
+              placeholder="you@organisation.org"
               required
             />
             <Field
-              label="Phone number"
-              name="phone"
+              label="PHONE NUMBER"
+              type="tel"
               value={form.phone}
-              error={errors.phone}
-              update={update}
+              onChange={(value) => update("phone", value)}
+              placeholder="+41 xx xxx xx xx"
             />
-          </div>
-        </FormSection>
-        <FormSection number="02" title="Your organisation">
-          <div className="form-grid">
-            <Field
-              label="Organisation"
-              name="organisation"
-              value={form.organisation}
-              error={errors.organisation}
-              update={update}
-              required
-            />
-            <Field
-              label="Role / capacity"
-              name="role"
-              value={form.role}
-              error={errors.role}
-              update={update}
-              required
-            />
-          </div>
-        </FormSection>
-        <FormSection number="03" title="Your requirements">
-          <Field
-            label="Dietary requirements"
-            name="dietary"
-            value={form.dietary}
-            error={errors.dietary}
-            update={update}
-            textarea
-          />
-          <Field
-            label="Accessibility requirements"
-            name="accessibility"
-            value={form.accessibility}
-            error={errors.accessibility}
-            update={update}
-            textarea
-          />
-        </FormSection>
-        <FormSection number="04" title="Travel & accommodation">
-          <Field
-            label="Travel and accommodation information"
-            name="travel"
-            value={form.travel}
-            error={errors.travel}
-            update={update}
-            textarea
-          />
-        </FormSection>
-        <FormSection number="05" title="Privacy & consent">
-          <label className="consent">
-            <input
-              type="checkbox"
-              checked={form.consent}
-              onChange={(event) => update("consent", event.target.checked)}
-            />
-            <span>
-              I agree to OAK Foundation&apos;s privacy policy and consent to my
-              registration data being used for event coordination.
-            </span>
-          </label>
-          {errors.consent && <p className="field-error">{errors.consent}</p>}
-          <button className="button button-dark form-submit" type="submit">
-            Complete registration <ArrowUpRight size={17} />
-          </button>
-        </FormSection>
-      </form>
-      <Footer />
-    </main>
+            <div className="requirements-box">
+              <div className="mobile-label">REQUIREMENTS</div>
+              <Field
+                label="DIETARY REQUIREMENTS"
+                value={form.dietary}
+                onChange={(value) => update("dietary", value)}
+                placeholder="e.g. Vegetarian, Halal, Gluten-free"
+                compact
+              />
+              <Field
+                label="ACCESSIBILITY REQUIREMENTS"
+                value={form.accessibility}
+                onChange={(value) => update("accessibility", value)}
+                placeholder="e.g. Wheelchair access, hearing loop"
+                compact
+              />
+              <Field
+                label="TRAVEL & ACCOMMODATION"
+                value={form.travel}
+                onChange={(value) => update("travel", value)}
+                placeholder="e.g. Flight from London, hotel needed"
+                compact
+              />
+            </div>
+            <label className="mobile-consent">
+              <input
+                type="checkbox"
+                checked={form.agreeToTerms}
+                onChange={(event) =>
+                  update("agreeToTerms", event.target.checked)
+                }
+              />
+              <span>
+                I agree to OAK Foundation&apos;s{" "}
+                <a href="#privacy">privacy policy</a> and consent to my
+                registration data being used for event coordination.
+              </span>
+            </label>
+            {error && (
+              <p className="mobile-error" role="alert">
+                {error}
+              </p>
+            )}
+            <button className="mobile-primary-button" type="submit">
+              Register &amp; Generate QR Code
+            </button>
+          </form>
+        </section>
+        <p className="mobile-footnote">
+          Your details are secured and handled by OAK Foundation in accordance
+          with GDPR.
+        </p>
+      </div>
+    </div>
   );
 }
 
-function FormSection({
-  number,
-  title,
-  children,
+function Stat({
+  icon,
+  value,
+  label,
 }: {
-  number: string;
-  title: string;
-  children: React.ReactNode;
+  icon: React.ReactNode;
+  value: string;
+  label: string;
 }) {
   return (
-    <section className="form-section">
-      <div className="form-section-title">
-        <span>{number}</span>
-        <h2>{title}</h2>
-      </div>
-      <div className="form-section-fields">{children}</div>
-    </section>
+    <div className="mobile-stat">
+      <span>{icon}</span>
+      <strong>{value}</strong>
+      <small>{label}</small>
+    </div>
   );
 }
 function Field({
   label,
-  name,
   value,
-  error,
-  update,
-  required,
+  onChange,
+  placeholder,
   type = "text",
-  textarea = false,
+  required,
+  compact,
 }: {
   label: string;
-  name: keyof FormData;
   value: string;
-  error?: string;
-  update: (field: keyof FormData, value: string) => void;
-  required?: boolean;
+  onChange: (value: string) => void;
+  placeholder?: string;
   type?: string;
-  textarea?: boolean;
+  required?: boolean;
+  compact?: boolean;
 }) {
-  const inputProps = {
-    id: name,
-    name,
-    value,
-    onChange: (
-      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => update(name, event.target.value),
-    "aria-invalid": Boolean(error),
-    "aria-describedby": error ? `${name}-error` : undefined,
-  };
   return (
-    <label className="field">
+    <label className={`mobile-field ${compact ? "compact" : ""}`}>
       {label}
-      {required && " *"}
-      {textarea ? (
-        <textarea {...inputProps} rows={3} />
-      ) : (
-        <input {...inputProps} type={type} />
-      )}
-      {error && (
-        <span className="field-error" id={`${name}-error`}>
-          {error}
-        </span>
-      )}
+      {required && <span> *</span>}
+      <input
+        type={type}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        required={required}
+      />
     </label>
   );
 }

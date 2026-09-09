@@ -47,7 +47,7 @@ export default function SuccessPage() {
             <br />
             <em>expected.</em>
           </h1>
-          <p>Keep this pass handy when you arrive in Geneva.</p>
+          <p>Keep this pass handy when you arrive at Cresta Lodge, Harare.</p>
           <div className="confirmation-actions">
             <button
               className="button button-dark"
@@ -74,7 +74,7 @@ export default function SuccessPage() {
             </strong>
             <span>{registration.organisation}</span>
           </div>
-          <p>Geneva · 9–11 March 2026</p>
+          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
           <QRCodeSVG
             value={registration.id}
             size={150}
