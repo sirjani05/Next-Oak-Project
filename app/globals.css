@@ -609,17 +609,17 @@ h2 {
   height: 100vh;
   justify-content: flex-start;
   left: 0;
-  padding: 28px 18px;
+  padding: 24px;
   position: fixed;
   top: 0;
-  width: 236px;
+  width: 256px;
   z-index: 30;
 }
 .platform-brand {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  margin-bottom: 35px;
+  margin-bottom: 24px;
   min-width: 0;
   text-align: center;
 }
@@ -647,25 +647,61 @@ h2 {
   margin-top: 3px;
 }
 .platform-nav {
+  border-top: 1px solid #f1f5f9;
   align-items: stretch;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  padding-top: 24px;
   justify-content: flex-start;
 }
 .platform-nav a {
   align-items: center;
-  border-radius: 10px;
-  color: #475569;
+  border-radius: 16px;
+  color: #5b6b87;
   display: flex;
-  font-size: 0.72rem;
-  gap: 6px;
-  padding: 12px 13px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 12px;
+  padding: 14px 16px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 .platform-nav a:hover,
 .platform-nav a.active {
   background: #1e2b4d;
   color: #fff;
+}
+.sidebar-location {
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 10px;
+  margin: auto -24px 0;
+  padding: 16px 24px 0;
+}
+.sidebar-location-icon {
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 999px;
+  color: #64748b;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.sidebar-location > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sidebar-location strong {
+  color: #0f172a;
+  font-size: 0.875rem;
+}
+.sidebar-location small {
+  color: #64748b;
+  font-size: 0.75rem;
 }
 .platform-mobile-heading {
   padding: 4px 2px 7px;
@@ -1081,7 +1117,7 @@ h2 {
 }
 @media (min-width: 801px) {
   .mobile-product-page {
-    margin-left: 236px;
+    margin-left: 256px;
     min-height: 100vh;
     padding: 48px 5vw 64px;
   }

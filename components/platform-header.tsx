@@ -4,11 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   CalendarDays,
-  LayoutGrid,
+  Globe,
   QrCode,
   ScanLine,
   UserPlus,
-  Users,
+  LayoutGrid,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,7 +26,7 @@ type PlatformLink = {
 const links: PlatformLink[] = [
   { href: "/register", label: "Register", icon: UserPlus },
   {
-    href: "/admin/check-in",
+    href: "/check-in",
     label: "Check In",
     icon: ScanLine,
     roles: ["Coordination Team"],
@@ -40,7 +40,7 @@ const links: PlatformLink[] = [
   {
     href: "/partners",
     label: "Partners",
-    icon: LayoutGrid,
+    icon: Globe,
     roles: [
       "Partner",
       "OAK Staff",
@@ -50,12 +50,12 @@ const links: PlatformLink[] = [
     ],
   },
   {
-    href: "/admin/attendance",
+    href: "/attendance",
     label: "Attendance",
-    icon: Users,
+    icon: LayoutGrid,
     roles: ["Coordination Team"],
   },
-  { href: "/pass", label: "QR Pass", icon: QrCode, roles: ["Partner"] },
+  { href: "/pass", label: "Entry Pass", icon: QrCode, roles: ["Partner"] },
 ];
 
 export function PlatformHeader() {
@@ -119,6 +119,15 @@ export function PlatformHeader() {
             );
           })}
       </nav>
+      <div className="sidebar-location">
+        <span className="sidebar-location-icon">
+          <Globe size={18} />
+        </span>
+        <span>
+          <strong>Harare, Zimbabwe</strong>
+          <small>9–11 March 2026</small>
+        </span>
+      </div>
     </aside>
   );
 }
