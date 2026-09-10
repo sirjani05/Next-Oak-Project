@@ -10,7 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { readRegistration, type UserRole } from "@/lib/session";
 
 type NavItem = {
@@ -50,9 +50,19 @@ const items: NavItem[] = [
 
 export function MobileNav() {
   const pathname = usePathname();
-  const [role] = useState<UserRole | null>(
-    () => readRegistration()?.role ?? null,
-  );
+  const [hasMounted, setHasMounted] = useState(false);
+  const [role, setRole] = useState<UserRole | null>(null);
+  const [registrationId, setRegistrationId] = useState("");
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      setHasMounted(true);
+      const registration = readRegistration();
+      setRole(registration?.role ?? null);
+      setRegistrationId(registration?.id ?? "");
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  if (!hasMounted) return null;
   const visible = items.filter(
     (item) => !item.roles || (role && item.roles.includes(role)),
   );
@@ -67,11 +77,7 @@ export function MobileNav() {
                 ? "active"
                 : ""
             }
-            href={
-              item.href === "/pass"
-                ? `/pass/${readRegistration()?.id ?? ""}`
-                : item.href
-            }
+            href={item.href === "/pass" ? `/pass/${registrationId}` : item.href}
             key={item.href}
           >
             <Icon />

@@ -3,9 +3,39 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Scan } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MobileNav } from "@/components/mobile-nav";
 import { PlatformHeader } from "@/components/platform-header";
 import { checkInAttendee } from "@/app/platform-actions";
+
+const simulatedAttendees = [
+  {
+    name: "Maria Schmidt",
+    code: "OAK-2026-7042-AKPH",
+    initials: "MS",
+    role: "Partner",
+    roleClass: "partner",
+  },
+  {
+    name: "James Odhiambo",
+    code: "OAK-2026-1193-JMQA",
+    initials: "JO",
+    role: "OAK Staff",
+    roleClass: "staff",
+  },
+  {
+    name: "Awa Diallo",
+    code: "OAK-2026-3310-ADGE",
+    initials: "AD",
+    role: "Coordination Team",
+    roleClass: "coordination",
+  },
+  {
+    name: "Fatima Z. Benali",
+    code: "OAK-2026-5592-FMIN",
+    initials: "FZB",
+    role: "Partner",
+    roleClass: "partner",
+  },
+];
 
 export default function CheckInScannerPage() {
   type BarcodeDetectorInstance = {
@@ -98,9 +128,24 @@ export default function CheckInScannerPage() {
         </section>
         <section className="mobile-card compact-card">
           <div className="mobile-label">SIMULATE QR SCAN</div>
-          <p className="mobile-footnote">
-            Live attendee simulation requires records in Supabase.
-          </p>
+          <div className="attendee-list">
+            {simulatedAttendees.map((attendee) => (
+              <button
+                className="attendee-row"
+                key={attendee.code}
+                onClick={() => checkCode(attendee.code)}
+              >
+                <span className="attendee-avatar">{attendee.initials}</span>
+                <span className="attendee-details">
+                  <strong>{attendee.name}</strong>
+                  <small>{attendee.code}</small>
+                </span>
+                <span className={`role-pill ${attendee.roleClass}`}>
+                  • {attendee.role}
+                </span>
+              </button>
+            ))}
+          </div>
         </section>
         <section className="mobile-card compact-card">
           <div className="mobile-label">MANUAL CODE ENTRY</div>
@@ -121,7 +166,6 @@ export default function CheckInScannerPage() {
           )}
         </section>
       </div>
-      <MobileNav />
     </div>
   );
 }

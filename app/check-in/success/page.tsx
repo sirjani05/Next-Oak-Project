@@ -2,7 +2,6 @@
 
 import { CheckCircle2, Clock, MapPin, Scan } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MobileNav } from "@/components/mobile-nav";
 
 export default function CheckInSuccessPage() {
   const router = useRouter();
@@ -17,7 +16,7 @@ export default function CheckInSuccessPage() {
             <h1>Checked In Successfully</h1>
             <p>
               <Clock />
-              09:34 · 9 November 2026
+              09:34 · 9 March 2026
             </p>
           </div>
         </section>
@@ -61,7 +60,6 @@ export default function CheckInSuccessPage() {
           Scan Next Attendee
         </button>
       </div>
-      <MobileNav />
     </div>
   );
 }

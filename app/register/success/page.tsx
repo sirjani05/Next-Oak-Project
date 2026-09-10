@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { ArrowUpRight, Printer } from "lucide-react";
@@ -13,11 +13,14 @@ type Registration = {
   id: string;
 };
 export default function SuccessPage() {
-  const [registration] = useState<Registration | null>(() => {
-    if (typeof window === "undefined") return null;
-    const saved = localStorage.getItem("oak-registration");
-    return saved ? (JSON.parse(saved) as Registration) : null;
-  });
+  const [registration, setRegistration] = useState<Registration | null>(null);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const saved = localStorage.getItem("oak-registration");
+      setRegistration(saved ? (JSON.parse(saved) as Registration) : null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
   if (!registration)
     return (
       <main>
@@ -78,7 +81,7 @@ export default function SuccessPage() {
           <QRCodeSVG
             value={registration.id}
             size={150}
-            bgColor="#f3f0e8"
+            bgColor="#ffffff"
             fgColor="#1d2421"
           />
           <small>

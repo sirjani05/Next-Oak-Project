@@ -3,15 +3,17 @@
 import Link from "next/link";
 import { Download } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useState } from "react";
-import { MobileNav } from "@/components/mobile-nav";
-import { PlatformHeader } from "@/components/platform-header";
+import { useEffect, useState } from "react";
 import { readRegistration, type Registration } from "@/lib/session";
 
 export default function PassPage({ params }: { params: { id: string } }) {
-  const [registration] = useState<Registration | null>(() =>
-    readRegistration(),
-  );
+  const [registration, setRegistration] = useState<Registration | null>(null);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() =>
+      setRegistration(readRegistration()),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, []);
   const id = params.id || registration?.id || "OAK-2026-7842-XKPH";
   const downloadQrCode = () => {
     const svg = document.querySelector<SVGSVGElement>(".entry-pass-card svg");
@@ -36,7 +38,6 @@ export default function PassPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="mobile-product-page">
-      <PlatformHeader />
       <div className="mobile-product-stack pass-page">
         <section className="pass-complete-banner">
           <p>REGISTRATION COMPLETE</p>
@@ -70,10 +71,10 @@ export default function PassPage({ params }: { params: { id: string } }) {
               Email<strong>{registration?.email ?? ""}</strong>
             </span>
             <span>
-              Event dates<strong>9–11 November 2026</strong>
+              Event dates<strong>9–11 March 2026</strong>
             </span>
             <span>
-              Location<strong>Cresta Lodge, Harare</strong>
+              Location<strong>Harare, Zimbabwe</strong>
             </span>
           </div>
         </section>
@@ -96,7 +97,6 @@ export default function PassPage({ params }: { params: { id: string } }) {
           Register another attendee
         </Link>
       </div>
-      <MobileNav />
     </div>
   );
 }

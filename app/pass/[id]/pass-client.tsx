@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { Download } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/mobile-nav";
 import { PlatformHeader } from "@/components/platform-header";
 import { readRegistration, type Registration } from "@/lib/session";
 
 export default function PassClient({ id }: { id: string }) {
-  const [registration] = useState<Registration | null>(() =>
-    readRegistration(),
-  );
+  const [registration, setRegistration] = useState<Registration | null>(null);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() =>
+      setRegistration(readRegistration()),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, []);
   const downloadQrCode = () => {
     const svg = document.querySelector<SVGSVGElement>(".entry-pass-card svg");
     if (!svg) return;

@@ -2,7 +2,6 @@
 
 import { AlertTriangle, Phone, RefreshCw, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MobileNav } from "@/components/mobile-nav";
 
 const reasons = [
   "QR code belongs to a different event",
@@ -56,7 +55,6 @@ export default function CheckInFailedPage() {
           </a>
         </div>
       </div>
-      <MobileNav />
     </div>
   );
 }

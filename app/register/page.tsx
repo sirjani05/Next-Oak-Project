@@ -4,8 +4,8 @@ import { FormEvent, useState } from "react";
 import { Calendar, ChevronDown, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { UserRole } from "@/lib/session";
-import { PlatformHeader } from "@/components/platform-header";
 import { registerAttendee } from "@/app/register/actions";
+import { PlatformHeader } from "@/components/platform-header";
 
 type FormData = {
   firstName: string;
@@ -15,10 +15,10 @@ type FormData = {
   role: UserRole | "";
   email: string;
   phone: string;
-  dietary: string;
-  accessibility: string;
-  travel: string;
-  accommodation: string;
+  dietaryRequirements: string;
+  accessibilityRequirements: string;
+  travelRequirements: string;
+  accommodationRequirements: string;
   agreeToTerms: boolean;
 };
 const initial: FormData = {
@@ -29,10 +29,10 @@ const initial: FormData = {
   role: "",
   email: "",
   phone: "",
-  dietary: "",
-  accessibility: "",
-  travel: "",
-  accommodation: "",
+  dietaryRequirements: "",
+  accessibilityRequirements: "",
+  travelRequirements: "",
+  accommodationRequirements: "",
   agreeToTerms: false,
 };
 
@@ -81,7 +81,7 @@ export default function RegistrationPage() {
       <div className="mobile-product-stack">
         <section className="mobile-banner">
           <h1>Partner Convening 2026</h1>
-          <p>Cresta Lodge, Harare · 9–11 November 2026</p>
+          <p>Geneva · 9–11 March 2026</p>
         </section>
         <div className="mobile-stats">
           <Stat icon={<User />} value="110+" label="Attendees" />
@@ -159,29 +159,29 @@ export default function RegistrationPage() {
               <div className="mobile-label">REQUIREMENTS</div>
               <Field
                 label="DIETARY REQUIREMENTS"
-                value={form.dietary}
-                onChange={(value) => update("dietary", value)}
+                value={form.dietaryRequirements}
+                onChange={(value) => update("dietaryRequirements", value)}
                 placeholder="e.g. Vegetarian, Halal, Gluten-free"
                 compact
               />
               <Field
                 label="ACCESSIBILITY REQUIREMENTS"
-                value={form.accessibility}
-                onChange={(value) => update("accessibility", value)}
+                value={form.accessibilityRequirements}
+                onChange={(value) => update("accessibilityRequirements", value)}
                 placeholder="e.g. Wheelchair access, hearing loop"
                 compact
               />
               <Field
                 label="TRAVEL & ACCOMMODATION"
-                value={form.travel}
-                onChange={(value) => update("travel", value)}
+                value={form.travelRequirements}
+                onChange={(value) => update("travelRequirements", value)}
                 placeholder="e.g. Flight from London, hotel needed"
                 compact
               />
               <Field
                 label="ACCOMMODATION REQUIREMENTS"
-                value={form.accommodation}
-                onChange={(value) => update("accommodation", value)}
+                value={form.accommodationRequirements}
+                onChange={(value) => update("accommodationRequirements", value)}
                 placeholder="e.g. Single room, shared room"
                 compact
               />
@@ -206,7 +206,7 @@ export default function RegistrationPage() {
               </p>
             )}
             <button className="mobile-primary-button" type="submit">
-              {isSubmitting ? "Registering..." : "Register"}
+              {isSubmitting ? "Registering..." : "Register & Generate QR Code"}
             </button>
           </form>
         </section>

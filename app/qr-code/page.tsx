@@ -2,14 +2,18 @@
 
 import { Download, MapPin } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MobileNav } from "@/components/mobile-nav";
 import { readRegistration, type Registration } from "@/lib/session";
 
 export default function QrCodePage() {
-  const [registration] = useState<Registration | null>(() =>
-    readRegistration(),
-  );
+  const [registration, setRegistration] = useState<Registration | null>(null);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() =>
+      setRegistration(readRegistration()),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, []);
   const id = registration?.id ?? "OAK-2026-7842-XKPH";
   const downloadQrCode = () => {
     const svg = document.querySelector<SVGSVGElement>(".qr-pass-card svg");

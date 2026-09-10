@@ -20,10 +20,10 @@ type RegistrationInput = {
   role: UserRole;
   email: string;
   phone: string;
-  dietary: string;
-  accessibility: string;
-  travel: string;
-  accommodation: string;
+  dietaryRequirements: string;
+  accessibilityRequirements: string;
+  travelRequirements: string;
+  accommodationRequirements: string;
   agreeToTerms: boolean;
 };
 
@@ -45,10 +45,10 @@ export async function registerAttendee(
     subPartner: clean(input.subPartner),
     email: clean(input.email).toLowerCase(),
     phone: clean(input.phone),
-    dietary: clean(input.dietary),
-    accessibility: clean(input.accessibility),
-    travel: clean(input.travel),
-    accommodation: clean(input.accommodation),
+    dietaryRequirements: clean(input.dietaryRequirements),
+    accessibilityRequirements: clean(input.accessibilityRequirements),
+    travelRequirements: clean(input.travelRequirements),
+    accommodationRequirements: clean(input.accommodationRequirements),
   };
 
   if (
@@ -72,27 +72,41 @@ export async function registerAttendee(
     input.role === "Partner"
       ? `OAK-2026-${randomUUID().slice(0, 4).toUpperCase()}-${randomUUID().slice(0, 4).toUpperCase()}`
       : null;
-  const supabase = await createClient();
-  const { error } = await supabase.from("attendees").insert({
-    qr_code: qrCode,
-    first_name: values.firstName,
-    last_name: values.lastName,
-    email: values.email,
-    phone: values.phone || null,
-    organization: values.organisation,
-    sub_partner: values.subPartner || null,
-    role: input.role,
-    dietary_requirements: values.dietary || null,
-    accessibility_requirements: values.accessibility || null,
-    travel_accommodation:
-      [values.travel, values.accommodation].filter(Boolean).join("; ") || null,
-    consent_agreed: true,
-  });
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("attendees").insert({
+      qr_code: qrCode,
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      phone: values.phone || null,
+      organization: values.organisation,
+      sub_partner: values.subPartner || null,
+      role: input.role,
+      dietary_requirements: values.dietaryRequirements || null,
+      accessibility_requirements: values.accessibilityRequirements || null,
+      travel_accommodation:
+        [values.travelRequirements, values.accommodationRequirements]
+          .filter(Boolean)
+          .join("; ") || null,
+      consent_agreed: true,
+    });
 
-  if (error) {
-    if (error.code === "23505") {
-      return { ok: false, error: "This email is already registered." };
+    if (error) {
+      console.error("Registration insert failed:", error.message);
+      if (error.code === "23505") {
+        return { ok: false, error: "This email is already registered." };
+      }
+      return {
+        ok: false,
+        error: "Registration could not be saved. Try again.",
+      };
     }
+  } catch (error) {
+    console.error(
+      "Registration insert failed:",
+      error instanceof Error ? error.message : String(error),
+    );
     return { ok: false, error: "Registration could not be saved. Try again." };
   }
 
