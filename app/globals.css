@@ -622,6 +622,7 @@ h2 {
   margin-bottom: 24px;
   min-width: 0;
   text-align: center;
+  border-bottom: hsla(0, 0%, 95%, 0.411);
 }
 .platform-brand img {
   background: #fff;
@@ -2311,7 +2312,6 @@ h2 {
   }
   .confirmation {
     display: block;
-    min-height: auto;
     padding: 0;
   }
   .pass {

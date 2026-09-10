@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { event } from "@/data/event";
 import { readRegistration, type UserRole } from "@/lib/session";
 import logo from "@/Logo-Oak-Foundation.svg.svg";
 
@@ -91,11 +90,7 @@ export function PlatformHeader() {
           height={76}
           priority
         />
-        <strong>OAK FOUNDATION</strong>
-        <span>PARTNER CONVENING 2026</span>
-        <small>
-          {event.location} | {event.dates}
-        </small>
+        <strong>PARTNER CONVENING 2026</strong>
       </Link>
       <nav aria-label="Platform navigation" className="platform-nav">
         {hasMounted &&
