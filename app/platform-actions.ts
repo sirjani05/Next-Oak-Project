@@ -65,6 +65,27 @@ export async function getPartners(): Promise<ActionResult<unknown[]>> {
     : { ok: true, data: data ?? [] };
 }
 
+export async function getPartner(id: string): Promise<ActionResult<unknown>> {
+  const supabase = await authorized([
+    "Partner",
+    "OAK Staff",
+    "Presenter",
+    "Observer",
+    "Coordination Team",
+  ]);
+  if (!supabase) return { ok: false, error: "Unauthorized" };
+  const { data, error } = await supabase
+    .from("partners")
+    .select(
+      "id, name, region, org_type, partner_since, about_text, focus_areas, website_url, contact_email, logo_url",
+    )
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data)
+    return { ok: false, error: "Partner could not be loaded." };
+  return { ok: true, data };
+}
+
 export async function lookupAttendee(
   qrCode: string,
 ): Promise<ActionResult<Attendee>> {

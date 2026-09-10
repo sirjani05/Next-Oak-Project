@@ -5,6 +5,7 @@ import { Mail, Search } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 import { PlatformHeader } from "@/components/platform-header";
 import { getPartners } from "@/app/platform-actions";
+import Link from "next/link";
 
 type Partner = {
   id: string;
@@ -78,7 +79,11 @@ export default function PartnersPage() {
         )}
         <div className="partner-grid">
           {filtered.map((partner) => (
-            <article className="partner-card" key={partner.id}>
+            <Link
+              className="partner-card"
+              href={`/partners/${partner.id}`}
+              key={partner.id}
+            >
               <span className="partner-logo">
                 {partner.name.slice(0, 2).toUpperCase()}
               </span>
@@ -88,17 +93,10 @@ export default function PartnersPage() {
                   {partner.org_type} · {partner.region}
                 </p>
               </div>
-              <a
-                href={
-                  partner.contact_email
-                    ? `mailto:${partner.contact_email}`
-                    : undefined
-                }
-                aria-label={`Contact ${partner.name}`}
-              >
+              <span aria-label={`Contact ${partner.name}`}>
                 <Mail />
-              </a>
-            </article>
+              </span>
+            </Link>
           ))}
         </div>
       </div>

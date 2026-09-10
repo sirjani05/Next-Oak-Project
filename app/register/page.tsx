@@ -40,12 +40,14 @@ export default function RegistrationPage() {
   const router = useRouter();
   const [form, setForm] = useState(initial);
   const [error, setError] = useState("");
+  const [duplicateEmail, setDuplicateEmail] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const update = (field: keyof FormData, value: string | boolean) =>
     setForm((current) => ({ ...current, [field]: value }));
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    setDuplicateEmail(false);
     if (
       !form.firstName ||
       !form.lastName ||
@@ -70,6 +72,7 @@ export default function RegistrationPage() {
     });
     setIsSubmitting(false);
     if (!result.ok) {
+      setDuplicateEmail(result.existingUser === true || result.status === 409);
       setError(result.error);
       return;
     }
@@ -200,11 +203,33 @@ export default function RegistrationPage() {
                 registration data being used for event coordination.
               </span>
             </label>
-            {error && (
-              <p className="mobile-error" role="alert">
-                {error}
-              </p>
-            )}
+            {error &&
+              (duplicateEmail ? (
+                <div
+                  className="duplicate-warning bg-amber-50 border-amber-400 text-amber-900"
+                  role="alert"
+                >
+                  <p>
+                    This email is already registered for OAK Partner Convening
+                    2026.
+                  </p>
+                  <button
+                    className="mobile-primary-button"
+                    type="button"
+                    onClick={() =>
+                      router.push(
+                        form.role === "Partner" ? "/pass" : "/programme",
+                      )
+                    }
+                  >
+                    View Existing Pass / Dashboard
+                  </button>
+                </div>
+              ) : (
+                <p className="mobile-error" role="alert">
+                  {error}
+                </p>
+              ))}
             <button className="mobile-primary-button" type="submit">
               {isSubmitting ? "Registering..." : "Register & Generate QR Code"}
             </button>
