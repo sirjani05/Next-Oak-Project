@@ -231,7 +231,7 @@ export default function RegistrationPage() {
                 </p>
               ))}
             <button className="mobile-primary-button" type="submit">
-              {isSubmitting ? "Registering..." : "Register & Generate QR Code"}
+              {isSubmitting ? "Registering..." : "Register"}
             </button>
           </form>
         </section>
