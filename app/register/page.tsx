@@ -1,9 +1,10 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Calendar, ChevronDown, User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { UserRole } from "@/lib/session";
+import type { UserRole, Registration } from "@/lib/session";
+import { sessionKey } from "@/lib/session";
 import { registerAttendee } from "@/app/register/actions";
 import { PlatformHeader } from "@/components/platform-header";
 
@@ -43,7 +44,7 @@ export default function RegistrationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const update = (field: keyof FormData, value: string | boolean) =>
     setForm((current) => ({ ...current, [field]: value }));
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setError("");
     if (
@@ -73,7 +74,26 @@ export default function RegistrationPage() {
       setError(result.error);
       return;
     }
-    router.push(result.destination);
+    const registration: Registration = {
+      firstName: form.firstName,
+      lastName: form.lastName,
+      organisation: form.organisation,
+      subPartner: form.subPartner,
+      role: form.role as UserRole,
+      email: form.email,
+      phone: form.phone,
+      dietary: form.dietaryRequirements,
+      accessibility: form.accessibilityRequirements,
+      travel: form.travelRequirements,
+      accommodation: form.accommodationRequirements,
+      id: result.id,
+    };
+    try {
+      window.localStorage.setItem(sessionKey, JSON.stringify(registration));
+    } catch {
+      // Storage may be unavailable; continue to redirect.
+    }
+    window.location.href = result.destination;
   };
   return (
     <div className="mobile-product-page">
@@ -92,7 +112,7 @@ export default function RegistrationPage() {
         </div>
         <section className="mobile-card">
           <h2>Registration Form</h2>
-          <form onSubmit={submit} className="mobile-form">
+          <form className="mobile-form">
             <div className="mobile-two-col">
               <Field
                 label="FIRST NAME"
@@ -207,7 +227,11 @@ export default function RegistrationPage() {
                 {error}
               </p>
             )}
-            <button className="mobile-primary-button" type="submit">
+            <button
+              className="mobile-primary-button"
+              type="button"
+              onClick={handleSubmit}
+            >
               {isSubmitting ? "Registering..." : "Register"}
             </button>
           </form>

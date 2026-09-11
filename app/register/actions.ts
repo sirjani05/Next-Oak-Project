@@ -3,6 +3,7 @@
 import { randomUUID } from "node:crypto";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/lib/session";
+import { defaultDestination } from "@/lib/session";
 
 const validRoles: UserRole[] = [
   "Partner",
@@ -122,8 +123,6 @@ export async function registerAttendee(
     destination:
       input.role === "Partner"
         ? `/pass/${qrCode}`
-        : input.role === "Coordination Team"
-          ? "/check-in"
-          : "/programme",
+        : defaultDestination(input.role),
   };
 }

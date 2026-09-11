@@ -1167,7 +1167,6 @@ h2 {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   color: #fff;
   padding: 24px;
-  text-align: center;
 }
 .mobile-banner h1,
 .checkin-heading h1 {
@@ -1186,10 +1185,7 @@ h2 {
   margin: 5px 0 0;
 }
 .mobile-stats {
-  background: #fff;
-  border: 1px solid #e8edf2;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(3, 1fr);
