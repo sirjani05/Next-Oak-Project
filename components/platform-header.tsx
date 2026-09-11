@@ -73,7 +73,8 @@ export function PlatformHeader() {
   }, []);
   const visibleLinks = links.filter(
     (link) =>
-      hasMounted && (!link.roles || (role && link.roles.includes(role))),
+      hasMounted &&
+      (pathname === "/register" ? link.href === "/register" : !link.roles || (role && link.roles.includes(role))),
   );
 
   return (

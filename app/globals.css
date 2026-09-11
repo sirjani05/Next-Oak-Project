@@ -618,9 +618,11 @@ h2 {
 .platform-brand {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  margin-bottom: 24px;
+  gap: 2px;
+  margin: 0;
+  margin-left: 0;
   min-width: 0;
+  padding: 0;
   text-align: center;
   border-bottom: hsla(0, 0%, 95%, 0.411);
 }
@@ -628,12 +630,14 @@ h2 {
   background: #fff;
   border-radius: 10px;
   height: 76px;
-  margin: 0 auto 8px;
+  margin: 0 auto;
+  margin-left: 0;
   object-fit: contain;
   padding: 7px;
   width: 122px;
 }
 .platform-brand strong {
+  color: #94a3b8;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
 }
@@ -1163,6 +1167,7 @@ h2 {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   color: #fff;
   padding: 24px;
+  text-align: center;
 }
 .mobile-banner h1,
 .checkin-heading h1 {
@@ -1181,9 +1186,15 @@ h2 {
   margin: 5px 0 0;
 }
 .mobile-stats {
+  background: #fff;
+  border: 1px solid #e8edf2;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(3, 1fr);
+  margin-top: 16px;
+  padding: 16px;
 }
 .mobile-stat {
   background: #fff;
@@ -1251,9 +1262,16 @@ h2 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.mobile-field > span {
+.field-label-row {
+  display: flex;
+  flex-direction: row;
+  color: #000000;
+  gap: 2px;
+}
+.field-label-row > span {
   color: #ef4444;
 }
+
 .mobile-field input,
 .mobile-select-wrap select {
   appearance: none;
@@ -1266,7 +1284,7 @@ h2 {
   font-weight: 400;
   letter-spacing: 0;
   outline: none;
-  padding: 10px 12px;
+  padding: 14px 12px;
   text-transform: none;
   width: 100%;
 }
@@ -1303,7 +1321,7 @@ h2 {
   background: #f4f7fa;
   border-color: rgba(203, 213, 225, 0.6);
   font-size: 0.7rem;
-  padding: 8px 10px;
+  padding: 12px 10px;
 }
 .mobile-field.compact {
   font-size: 0.56rem;
@@ -3004,7 +3022,14 @@ h2 {
     font-size: 0.65rem;
   }
   .mobile-card {
+    max-width: 720px;
+    margin: 0 auto;
     padding: 30px;
+  }
+  .register-intro {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .mobile-card h2 {
     font-size: 1.2rem;

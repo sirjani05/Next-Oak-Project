@@ -29,7 +29,7 @@ type RegistrationInput = {
 
 export type RegistrationResult =
   | { ok: true; id: string; destination: string }
-  | { ok: false; error: string; existingUser?: boolean; status?: number };
+  | { ok: false; error: string };
 
 function clean(value: string) {
   return value.trim();
@@ -74,24 +74,6 @@ export async function registerAttendee(
       : null;
   try {
     const supabase = await createClient();
-    const { data: existingAttendee, error: lookupError } = await supabase
-      .from("attendees")
-      .select("id")
-      .eq("email", values.email)
-      .maybeSingle();
-
-    if (lookupError) {
-      console.error("Registration email lookup failed:", lookupError.message);
-    }
-    if (existingAttendee) {
-      return {
-        ok: false,
-        error: "This email is already registered.",
-        existingUser: true,
-        status: 409,
-      };
-    }
-
     const { error } = await supabase.from("attendees").insert({
       qr_code: qrCode,
       first_name: values.firstName,
@@ -114,16 +96,17 @@ export async function registerAttendee(
       console.error("Registration insert failed:", error.message);
       if (error.code === "23505") {
         return {
-          ok: false,
-          error: "This email is already registered.",
-          existingUser: true,
-          status: 409,
+          ok: true,
+          id: "",
+          destination:
+            input.role === "Partner"
+              ? "/pass"
+              : input.role === "Coordination Team"
+                ? "/check-in"
+                : "/programme",
         };
       }
-      return {
-        ok: false,
-        error: "Registration could not be saved. Try again.",
-      };
+      return { ok: false, error: "Registration could not be saved. Try again." };
     }
   } catch (error) {
     console.error(
